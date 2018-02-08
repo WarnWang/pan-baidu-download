@@ -3,7 +3,7 @@
 from __future__ import print_function
 
 import base64
-import urllib.parse as urlparse
+import urlparse
 import logging
 import pickle
 from requests.utils import dict_from_cookiejar
