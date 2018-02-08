@@ -203,7 +203,7 @@ class Pan(object):
         js = None
         try:
             js = self._get_js(link, secret)
-        except IndexError, e:
+        except IndexError as e:
             # Retry with new cookies
             js = self._get_js(link, secret)
 
@@ -230,7 +230,7 @@ class Pan(object):
     def bd_get_files(self, shareinfo, path):
         # Let's do a maximum of 100 pages
         file_list = []
-        for page in xrange(1, 100):
+        for page in range(1, 100):
             print('Fetching page', page)
             file_list_new = self.bdlist(shareinfo, path, page)
             file_list.extend(file_list_new)

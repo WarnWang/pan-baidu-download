@@ -3,7 +3,7 @@
 from __future__ import print_function
 
 import base64
-import urlparse
+import urllib.parse as urlparse
 import logging
 import pickle
 from requests.utils import dict_from_cookiejar
@@ -26,6 +26,8 @@ __all__ = [
 URL = ['pan.baidu.com', 'yun.baidu.com']
 FILTER_KEYS = ['shareid', 'server_filename', 'isdir', 'fs_id', 'sign', 'time_stamp', 'shorturl', 'dlink',
                'filelist', 'operation']
+
+
 # TODO: add md5
 
 
@@ -105,6 +107,7 @@ def add_http(url):
     else:
         return 'http://' + url
 
+
 convert_none = lambda opt, arg: opt + arg if arg else ""
 
 
@@ -174,6 +177,7 @@ def hack_sign(sign3, sign1):
     :type sign1: str
     :return: str (base64 encoded string)
     """
+
     def sign2(s3, s1):
         o = ""
         v = len(s3)
@@ -193,7 +197,8 @@ def hack_sign(sign3, sign1):
             k = p[((p[i] + p[u]) % 256)]
             o += chr(ord(s1[q]) ^ k)
         return o
-    return base64.encodestring(sign2(sign3, sign1)).rstrip("\n")
+
+    return base64.encodebytes(sign2(sign3, sign1)).rstrip("\n")
 
 
 def get_logger(logger_name):
@@ -212,4 +217,3 @@ def save_cookies(cookies):
 
 
 logger = get_logger('pan')
-
