@@ -49,7 +49,7 @@ global_config = Config()
 def config(configuration):
     if len(configuration) == 0:
         for k, v in global_config.config.iteritems():
-            print '{0} -> {1}'.format(k, v)
+            print('{} -> {}'.format(k, v))
     elif configuration[0] == 'delete':
         global_config.delete(configuration[1])
         print('Successfully delete {}'.format(configuration[1]))
