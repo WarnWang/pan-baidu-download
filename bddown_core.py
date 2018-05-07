@@ -240,6 +240,7 @@ class Pan(object):
         for page in range(1, 100):
             print('Fetching page', page)
             file_list_new = self.bdlist(shareinfo, path, page)
+            sleep(5)
             file_list.extend(file_list_new)
             if len(file_list_new) != 100:
                 break
@@ -248,6 +249,7 @@ class Pan(object):
                 self.all_files.append(f)
             else:
                 self.bd_get_files(shareinfo, f['path'])
+            sleep(5)
 
     def verify_passwd(self, url, secret=None):
         """
