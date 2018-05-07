@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 from __future__ import print_function
 
 import os
@@ -14,7 +15,7 @@ from config import global_config
 def download_command(filename, savedir, link, cookies, limit=None, output_dir=None):
     reload(sys)
     sys.setdefaultencoding("utf-8")
-    bool(output_dir) and not os.path.exists(output_dir) and os.makedirs(output_dir)
+    bool(savedir) and not os.path.exists(savedir) and os.makedirs(savedir)
     print("\033[32m" + filename + "\033[0m")
     pan_ua = 'netdisk;5.2.6;PC;PC-Windows;6.2.9200;WindowsBaiduYunGuanJia'
     cmd = 'aria2c -c -d "{savedir}" -o "{filename}" -s10 -x10' \
@@ -26,6 +27,7 @@ def download_command(filename, savedir, link, cookies, limit=None, output_dir=No
                              dir=convert_none('--dir=', output_dir))
     print(cmd)
     subprocess.call(cmd, shell=True)
+
 
 def select_download(fis):
     if len(fis) <= 1:
@@ -45,7 +47,7 @@ def select_download(fis):
         if len(x) == 1:
             selected_numbers += [int(x[0])]
         elif len(x) == 2:
-            selected_numbers += range(int(x[0]), int(x[1])+1)
+            selected_numbers += range(int(x[0]), int(x[1]) + 1)
         else:
             print("Error, your input seems illegal." + str(len(x)))
             return None
@@ -53,7 +55,7 @@ def select_download(fis):
     # ensure no duplicate numbers
     selected_numbers = list(set(selected_numbers))
 
-    selected_fis = [fis[i-1] for i in selected_numbers]
+    selected_fis = [fis[i - 1] for i in selected_numbers]
 
     print("Download list:")
     counter = 1
@@ -63,6 +65,7 @@ def select_download(fis):
         counter += 1
 
     return selected_fis
+
 
 def download(args):
     limit = global_config.limit
@@ -106,8 +109,8 @@ def download(args):
                 if cookies:
                     cookies += '"'
 
-                savedir = fi.path.replace(fi.parent_path, '', 1)[1:]
-                download_command(fi.filename, savedir, fi.dlink, cookies=cookies, limit=limit, output_dir=output_dir)
+                savedir = os.path.join(output_dir, fi.path.replace(fi.parent_path, '', 1)[1:])
+                download_command(fi.filename, savedir, fi.dlink, cookies=cookies, limit=limit)
 
         elif res.get('type') == 4:
             pan = Pan()

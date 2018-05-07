@@ -7,7 +7,8 @@ import os
 import json
 import platform
 import pickle
-from time import time
+from time import time, sleep
+
 try:
     from urllib import unquote as url_unquote
 except ImportError:
@@ -20,6 +21,7 @@ from util import logger
 from command.config import global_config
 
 import sys
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -114,7 +116,7 @@ class Pan(object):
             'dir': path,
             'order': 'time',
             'desc': 1,
-            '_': int(time()*1000),
+            '_': int(time() * 1000),
             'bdstoken': '',
             'channel': 'chunlei',
             'web': 1,
@@ -212,7 +214,7 @@ class Pan(object):
             'http://d.pcs.baidu.com/rest/2.0/pcs/file?method=plantcookie&type=ett')
         self.pcsett = self.session.cookies.get('pcsett')
         logger.debug(self.pcsett, extra={
-                     'type': 'cookies', 'method': 'SetCookies'})
+            'type': 'cookies', 'method': 'SetCookies'})
 
         if not shareinfo.match(js):
             pass
@@ -225,7 +227,12 @@ class Pan(object):
                 self.bd_get_files(shareinfo, fi['path'])
 
         # get file details include dlink, path, filename ...
-        return [self.get_file_info(shareinfo, fsid=f['fs_id'], secret=secret) for f in self.all_files]
+        result_list = []
+        for f in self.all_files:
+            result_list.append(self.get_file_info(shareinfo, fsid=f['fs_id'], secret=secret))
+            sleep(5)
+
+        return result_list
 
     def bd_get_files(self, shareinfo, path):
         # Let's do a maximum of 100 pages
@@ -301,11 +308,13 @@ class Pan(object):
             response = None
         return response
 
+
 class FileInfo(object):
     def __init__(self):
         self.filename = None
         self.path = None
         self.dlink = None
+
 
 class ShareInfo(object):
     pattern = re.compile('yunData\.setData\((.*?)\);')
@@ -332,7 +341,7 @@ class ShareInfo(object):
         _filename = re.search(self.filename_pattern, js)
         if _filename:
             self.filename = _filename.group(1).decode('unicode_escape')
-        
+
         data = re.findall(self.pattern, js)[0]
         if not data:
             return False
