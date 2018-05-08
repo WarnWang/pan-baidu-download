@@ -16,7 +16,6 @@ except ImportError:
 
 import requests
 
-import util
 from util import logger
 from command.config import global_config
 
