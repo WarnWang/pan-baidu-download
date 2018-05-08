@@ -249,7 +249,6 @@ class Pan(object):
                 self.all_files.append(f)
             else:
                 self.bd_get_files(shareinfo, f['path'])
-            sleep(5)
 
     def verify_passwd(self, url, secret=None):
         """
